@@ -1,0 +1,583 @@
+```css
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #203746;
+  background: #f3f7fa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Login page */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 35px 20px;
+  background:
+    radial-gradient(circle at top left, #dff4f2, transparent 45%),
+    #f3f7fa;
+}
+
+.login-brand {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #d9f3ee;
+  color: #087e78;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.login-brand .brand-icon {
+  margin-bottom: 8px;
+}
+
+.login-brand h1 {
+  margin: 0;
+  color: #126b70;
+  font-size: 38px;
+  letter-spacing: -1.5px;
+}
+
+.login-brand > p {
+  margin: 8px 0 0;
+  color: #657985;
+  font-size: 14px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  padding: 35px;
+  background: #fff;
+  border: 1px solid #e1e9ed;
+  border-radius: 16px;
+  box-shadow: 0 15px 45px rgba(27, 65, 78, 0.1);
+}
+
+.login-card h2 {
+  margin: 0 0 9px;
+  color: #203746;
+  font-size: 27px;
+}
+
+.login-subtitle {
+  margin: 0 0 25px;
+  color: #70818c;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-card label {
+  margin: 15px 0 8px;
+  color: #304956;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login-card input {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid #cfdde3;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #203746;
+  font-size: 15px;
+}
+
+.login-card input:focus {
+  border-color: #138b8b;
+  box-shadow: 0 0 0 3px rgba(19, 139, 139, 0.12);
+}
+
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  padding-right: 65px;
+}
+
+.show-password {
+  position: absolute;
+  right: 10px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  color: #087e78;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.login-button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #087e78;
+  color: #fff;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.login-button:hover {
+  background: #066762;
+}
+
+.login-message {
+  margin: 12px 0 0;
+  color: #b42318;
+  font-size: 13px;
+}
+
+.login-footer {
+  margin: 25px 0 0;
+  color: #81919a;
+  text-align: center;
+  font-size: 12px;
+}
+
+.login-note {
+  margin: 22px 0 0;
+  color: #72858e;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Main dashboard */
+
+.app {
+  min-height: 100vh;
+  background: #f3f7fa;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 6%;
+  background: #fff;
+  border-bottom: 1px solid #e1e9ed;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.header-brand h1 {
+  margin: 0;
+  color: #126b70;
+  font-size: 25px;
+}
+
+.header-brand p {
+  margin: 5px 0 0;
+  color: #72838d;
+  font-size: 13px;
+}
+
+.logout-button {
+  padding: 10px 18px;
+  border: 1px solid #cbdde0;
+  border-radius: 8px;
+  background: #fff;
+  color: #126b70;
+  font-weight: 600;
+}
+
+.logout-button:hover {
+  background: #eaf6f4;
+}
+
+.dashboard {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 30px 22px;
+}
+
+.search-section,
+.patient-card,
+.content-card {
+  margin-bottom: 22px;
+  padding: 25px;
+  border: 1px solid #e1e9ed;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(27, 65, 78, 0.04);
+}
+
+.search-section h2,
+.patient-card h2,
+.content-card h2 {
+  margin: 0 0 13px;
+  color: #203f4d;
+  font-size: 21px;
+}
+
+.search-section > p {
+  color: #71828c;
+  font-size: 14px;
+}
+
+.search-box {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid #cfdde3;
+  border-radius: 8px;
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: #138b8b;
+}
+
+.search-box button,
+.report-item button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #087e78;
+  color: #fff;
+  font-weight: 600;
+}
+
+.search-box button:hover,
+.report-item button:hover {
+  background: #066762;
+}
+
+.message {
+  margin: 15px 0 0;
+  color: #087e78;
+  font-size: 14px;
+}
+
+.patient-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.patient-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 15px;
+  border-radius: 9px;
+  background: #f3f8f9;
+  overflow-wrap: anywhere;
+}
+
+.patient-grid span {
+  color: #71828c;
+  font-size: 13px;
+}
+
+.patient-grid strong {
+  color: #203f4d;
+  font-size: 15px;
+}
+
+/* Navigation tabs */
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+  padding: 8px;
+  border: 1px solid #e1e9ed;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.tabs button {
+  flex: 1;
+  min-width: 145px;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #607580;
+  font-size: 14px;
+}
+
+.tabs button:hover {
+  background: #f0f7f7;
+}
+
+.tabs button.active {
+  background: #dff3ef;
+  color: #087e78;
+  font-weight: bold;
+}
+
+.content-card > p {
+  color: #536975;
+  line-height: 1.7;
+}
+
+/* Medical history */
+
+.history-item {
+  margin-top: 15px;
+  padding: 18px;
+  border: 1px solid #e1e9ed;
+  border-left: 4px solid #138b8b;
+  border-radius: 8px;
+  background: #fbfdfd;
+}
+
+.history-item h3 {
+  margin-top: 0;
+  color: #126b70;
+}
+
+.history-item p,
+.report-item p,
+.timeline-content p {
+  color: #536975;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Medical reports */
+
+.reports-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.reports-header h2 {
+  margin: 0;
+}
+
+.upload-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 16px;
+  border-radius: 8px;
+  background: #087e78;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.upload-button:hover {
+  background: #066762;
+}
+
+.reports-list {
+  margin-top: 20px;
+}
+
+.report-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e8eef1;
+}
+
+.report-item:last-child {
+  border-bottom: none;
+}
+
+.report-item h3 {
+  margin: 0 0 8px;
+  color: #203f4d;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.report-item p {
+  margin: 4px 0;
+}
+
+/* Health timeline */
+
+.timeline {
+  margin-top: 25px;
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  gap: 18px;
+  padding-bottom: 28px;
+}
+
+.timeline-item:not(:last-child)::before {
+  position: absolute;
+  top: 15px;
+  bottom: 0;
+  left: 6px;
+  width: 2px;
+  background: #cce7e3;
+  content: "";
+}
+
+.timeline-dot {
+  z-index: 1;
+  flex: 0 0 14px;
+  width: 14px;
+  height: 14px;
+  margin-top: 3px;
+  border: 3px solid #087e78;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.timeline-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeline-date {
+  color: #087e78;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.timeline-content h3 {
+  margin: 9px 0;
+  font-size: 16px;
+}
+
+.timeline-content h4 {
+  margin: 8px 0;
+  color: #203f4d;
+}
+
+.app-footer {
+  padding: 22px;
+  color: #81919a;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Mobile layout */
+
+@media (max-width: 700px) {
+  .login-card {
+    padding: 25px 22px;
+  }
+
+  .header {
+    padding: 18px 20px;
+  }
+
+  .dashboard {
+    padding: 20px 14px;
+  }
+
+  .search-section,
+  .patient-card,
+  .content-card {
+    padding: 18px;
+  }
+
+  .patient-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tabs button {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+@media (max-width: 440px) {
+  .patient-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-box {
+    flex-direction: column;
+  }
+
+  .search-box button {
+    width: 100%;
+  }
+
+  .report-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .reports-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .header-brand h1 {
+    font-size: 21px;
+  }
+}
+```
