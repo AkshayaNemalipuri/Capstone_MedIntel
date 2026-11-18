@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Doctor Registration | MedIntel</title><link rel="stylesheet" href="assets/styles.css"><script src="assets/config.js"></script><script src="assets/common.js" defer></script></head>
+<body><main class="auth-wrap"><section class="card auth-card"><h1 class="brand">MedIntel</h1><h2>Doctor Registration</h2><p class="subtitle">Register your professional account.</p>
+<form id="registerForm"><div class="form-grid">
+<div class="span-2"><label for="full_name">Full name</label><input id="full_name" required maxlength="100"></div>
+<div class="span-2"><label for="email">Email address</label><input id="email" type="email" required></div>
+<div><label for="password">Password</label><input id="password" type="password" minlength="8" required></div>
+<div><label for="confirm">Confirm password</label><input id="confirm" type="password" minlength="8" required></div>
+<div><label for="phone">Phone</label><input id="phone" type="tel"></div>
+<div><label for="registration_number">Medical registration number</label><input id="registration_number" required></div>
+<div><label for="specialization">Specialization</label><select id="specialization" required><option value="">Select specialization</option><option>General Physician</option><option>Cardiology</option><option>Dermatology</option><option>Neurology</option><option>Orthopedics</option><option>Pediatrics</option><option>Gynecology</option><option>ENT</option><option>Psychiatry</option><option>Other</option></select></div>
+<div><label for="qualification">Qualification</label><input id="qualification" placeholder="MBBS, MD" required></div>
+<div><label for="experience">Years of experience</label><input id="experience" type="number" min="0" max="80" value="0" required></div>
+<div><label for="hospital">Hospital / Clinic</label><input id="hospital"></div>
+<div class="span-2"><label for="address">Address</label><textarea id="address"></textarea></div>
+</div><button class="full" id="submitBtn">Register as Doctor</button><div id="message" class="message" role="status"></div></form>
+<p class="links">Already registered? <a href="doctor-login.html">Doctor login</a></p><p class="links"><a href="index.html">Back to home</a></p></section></main>
+<script>
+document.getElementById("registerForm").addEventListener("submit",async e=>{
+ e.preventDefault();const msg=document.getElementById("message"),btn=document.getElementById("submitBtn");
+ const password=document.getElementById("password").value;
+ if(password!==document.getElementById("confirm").value){showMessage(msg,"Passwords do not match.","error");return;}
+ btn.disabled=true;
+ try{const result=await api("/doctor/register",{method:"POST",body:JSON.stringify({
+  full_name:document.getElementById("full_name").value.trim(),email:document.getElementById("email").value.trim(),
+  password,phone:document.getElementById("phone").value.trim()||null,
+  registration_number:document.getElementById("registration_number").value.trim(),
+  specialization:document.getElementById("specialization").value,qualification:document.getElementById("qualification").value.trim(),
+  experience:Number(document.getElementById("experience").value),hospital:document.getElementById("hospital").value.trim()||null,
+  address:document.getElementById("address").value.trim()||null
+ })});showMessage(msg,result.message+" Please log in.","success");setTimeout(()=>location.href="doctor-login.html",1200);
+ }catch(err){showMessage(msg,err.message,"error");}finally{btn.disabled=false;}
+});
+</script></body></html>

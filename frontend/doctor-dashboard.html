@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Doctor Dashboard | MedIntel</title><link rel="stylesheet" href="assets/styles.css"><script src="assets/config.js"></script><script src="assets/common.js"></script></head>
+<body><header class="topbar"><h1 class="brand">MedIntel | Doctor</h1><div class="actions"><span id="welcome" class="muted"></span><button onclick="logout()">Logout</button></div></header>
+<main class="container"><section class="panel"><h3>Doctor Profile</h3><div id="profile" class="muted">Loading profile...</div></section>
+<section class="panel"><h3>Registered Patients</h3><p class="muted">Select a patient to view their medical history and reports.</p><div id="patients">Loading patients...</div></section>
+<section class="panel"><h3>Selected Patient Records</h3><div id="selectedPatient" class="muted">Select a patient above.</div><div id="history"></div><div id="reports"></div></section>
+</main>
+<script>
+if(!requireLogin("doctor")){}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+async function loadPatients(){
+ try{const [profile,patients]=await Promise.all([api("/doctor/profile"),api("/doctor/patients")]);
+ document.getElementById("welcome").textContent="Welcome, Dr. "+profile.full_name;
+ document.getElementById("profile").innerHTML=`<p><b>Name:</b> ${esc(profile.full_name)}</p><p><b>Email:</b> ${esc(profile.email)}</p><p><b>Specialization:</b> ${esc(profile.specialization)}</p><p><b>Hospital:</b> ${esc(profile.hospital||"-")}</p><p><b>Registration number:</b> ${esc(profile.registration_number)}</p>`;
+ document.getElementById("patients").innerHTML=patients.length?patients.map(p=>`<div class="item"><strong>${esc(p.name)}</strong><p class="muted">Patient ID: ${p.id} · Age: ${p.age} · ${esc(p.gender)}</p><button onclick="viewPatient(${p.id})">View records</button></div>`).join(""):"<p class='muted'>No patients have registered yet.</p>";
+ }catch(err){alert(err.message);}
+}
+async function viewPatient(id){
+ try{const [patientsHistory,patientReports,patient]=await Promise.all([api(`/doctor/patients/${id}/medical-history`),api(`/doctor/patients/${id}/reports`),api(`/patients/${id}`)]);
+ document.getElementById("selectedPatient").innerHTML=`<h3>${esc(patient.name)} (ID ${patient.id})</h3><p>Email: ${esc(patient.email)} · Blood group: ${esc(patient.blood_group||"-")}</p>`;
+ document.getElementById("history").innerHTML="<h3>Medical history</h3>"+(patientsHistory.length?patientsHistory.map(h=>`<div class="item"><strong>${esc(h.condition)}</strong><p>${esc(h.diagnosis_date||"")} · ${esc(h.notes||h.treatment||"")}</p></div>`).join(""):"<p class='muted'>No history available.</p>");
+ document.getElementById("reports").innerHTML="<h3>Reports</h3>"+(patientReports.length?patientReports.map(r=>`<div class="item"><strong>${esc(r.report_name)}</strong><p>${esc(r.uploaded_at||"")}</p><button onclick="downloadReport(${r.id},'${esc(r.report_name).replace(/'/g,"\\'")}')">Download report</button></div>`).join(""):"<p class='muted'>No reports available.</p>");
+ }catch(err){alert(err.message);}
+}
+loadPatients();
+</script></body></html>

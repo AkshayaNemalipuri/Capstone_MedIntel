@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Patient Registration | MedIntel</title><link rel="stylesheet" href="assets/styles.css"><script src="assets/config.js"></script><script src="assets/common.js" defer></script></head>
+<body><main class="auth-wrap"><section class="card auth-card"><h1 class="brand">MedIntel</h1><h2>Patient Registration</h2><p class="subtitle">Create your account to access your medical records.</p>
+<form id="registerForm"><div class="form-grid">
+<div class="span-2"><label for="name">Full name</label><input id="name" required maxlength="100" autocomplete="name"></div>
+<div class="span-2"><label for="email">Email address</label><input id="email" type="email" required autocomplete="email"></div>
+<div><label for="password">Password</label><input id="password" type="password" minlength="8" required autocomplete="new-password"></div>
+<div><label for="confirm">Confirm password</label><input id="confirm" type="password" minlength="8" required autocomplete="new-password"></div>
+<div><label for="age">Age</label><input id="age" type="number" min="1" max="120" required></div>
+<div><label for="gender">Gender</label><select id="gender" required><option value="">Select</option><option>Female</option><option>Male</option><option>Other</option><option>Prefer not to say</option></select></div>
+<div><label for="phone">Phone</label><input id="phone" type="tel"></div>
+<div><label for="blood_group">Blood group</label><select id="blood_group"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+<div class="span-2"><label for="allergies">Allergies (optional)</label><textarea id="allergies"></textarea></div>
+</div><button class="full" id="submitBtn">Create Patient Account</button><div id="message" class="message" role="status"></div></form>
+<p class="links">Already registered? <a href="patient-login.html">Patient login</a></p><p class="links"><a href="index.html">Back to home</a></p></section></main>
+<script>
+document.getElementById("registerForm").addEventListener("submit", async e => {
+ e.preventDefault(); const msg=document.getElementById("message"), btn=document.getElementById("submitBtn");
+ const password=document.getElementById("password").value;
+ if(password!==document.getElementById("confirm").value){showMessage(msg,"Passwords do not match.","error");return;}
+ btn.disabled=true; btn.textContent="Creating account...";
+ try{
+  const result=await api("/auth/patient/register",{method:"POST",body:JSON.stringify({
+   name:document.getElementById("name").value.trim(),email:document.getElementById("email").value.trim(),
+   password,age:Number(document.getElementById("age").value),gender:document.getElementById("gender").value,
+   phone:document.getElementById("phone").value.trim()||null,blood_group:document.getElementById("blood_group").value||null,
+   allergies:document.getElementById("allergies").value.trim()||null
+  })});
+  showMessage(msg,result.message+" Please log in.","success");
+  setTimeout(()=>location.href="patient-login.html",1200);
+ }catch(err){showMessage(msg,err.message,"error");}
+ finally{btn.disabled=false;btn.textContent="Create Patient Account";}
+});
+</script></body></html>

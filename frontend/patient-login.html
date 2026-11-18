@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Patient Login | MedIntel</title><link rel="stylesheet" href="assets/styles.css"><script src="assets/config.js"></script><script src="assets/common.js" defer></script></head>
+<body><main class="auth-wrap"><section class="card auth-card"><h1 class="brand">MedIntel</h1><h2>Patient Login</h2><p class="subtitle">Sign in to view your medical records.</p>
+<form id="loginForm"><label for="email">Email address</label><input id="email" type="email" required autocomplete="username"><label for="password">Password</label><input id="password" type="password" required autocomplete="current-password"><button class="full" id="submitBtn">Login as Patient</button><div id="message" class="message" role="status"></div></form>
+<p class="links">New patient? <a href="patient-register.html">Create account</a></p><p class="links"><a href="index.html">Back to home</a></p></section></main>
+<script>
+document.getElementById("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();const msg=document.getElementById("message"),btn=document.getElementById("submitBtn");btn.disabled=true;
+ try{const data=await api("/auth/patient/login",{method:"POST",body:JSON.stringify({email:document.getElementById("email").value.trim(),password:document.getElementById("password").value})});
+ localStorage.setItem("medintel_token",data.access_token);localStorage.setItem("medintel_role","patient");localStorage.setItem("medintel_user",JSON.stringify(data.user));location.href="patient-dashboard.html";
+ }catch(err){showMessage(msg,err.message,"error");btn.disabled=false;}
+});
+</script></body></html>

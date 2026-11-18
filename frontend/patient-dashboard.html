@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Patient Dashboard | MedIntel</title><link rel="stylesheet" href="assets/styles.css"><script src="assets/config.js"></script><script src="assets/common.js"></script></head>
+<body><header class="topbar"><h1 class="brand">MedIntel | Patient</h1><div class="actions"><span id="welcome" class="muted"></span><button onclick="logout()">Logout</button></div></header>
+<main class="container"><div class="grid">
+<section class="panel"><h3>My Profile</h3><div id="profile" class="muted">Loading profile...</div></section>
+<section class="panel"><h3>Upload Medical Report</h3><form id="uploadForm"><label for="reportFile">Choose PDF / JPG / PNG (max 10 MB)</label><input id="reportFile" type="file" accept=".pdf,.jpg,.jpeg,.png" required><button class="full">Upload report</button><div id="uploadMessage" class="message"></div></form></section>
+</div>
+<section class="panel"><h3>My Medical History</h3><div id="history">Loading...</div></section>
+<section class="panel"><h3>My Reports</h3><div id="reports">Loading...</div></section>
+<section class="panel"><h3>Health Timeline</h3><div id="timeline">Loading...</div></section>
+</main>
+<script>
+if(!requireLogin("patient")){}
+async function loadDashboard(){
+ try{
+  const profile=await api("/auth/patient/me");document.getElementById("welcome").textContent="Welcome, "+profile.name;
+  document.getElementById("profile").innerHTML=`<p><b>Name:</b> ${escapeHtml(profile.name)}</p><p><b>Email:</b> ${escapeHtml(profile.email)}</p><p><b>Age:</b> ${profile.age}</p><p><b>Gender:</b> ${escapeHtml(profile.gender)}</p><p><b>Phone:</b> ${escapeHtml(profile.phone||"-")}</p><p><b>Blood group:</b> ${escapeHtml(profile.blood_group||"-")}</p>`;
+  const [history,reports,timeline]=await Promise.all([api(`/patients/${profile.id}/medical-history`),api(`/patients/${profile.id}/reports`),api(`/patients/${profile.id}/timeline`)]);
+  document.getElementById("history").innerHTML=history.length?history.map(h=>`<div class="item"><strong>${escapeHtml(h.condition)}</strong><span class="muted">${escapeHtml(h.diagnosis_date||"Date not provided")}</span><p>${escapeHtml(h.notes||h.treatment||"No additional notes")}</p></div>`).join(""):"<p class='muted'>No medical history added yet.</p>";
+  document.getElementById("reports").innerHTML=reports.length?reports.map(r=>`<div class="item"><strong>${escapeHtml(r.report_name)}</strong><span class="muted">${escapeHtml(r.uploaded_at||"")}</span><p><button onclick="downloadReport(${r.id},'${escapeJs(r.report_name)}')">Download</button></p></div>`).join(""):"<p class='muted'>No reports uploaded yet.</p>";
+  document.getElementById("timeline").innerHTML=timeline.timeline.length?timeline.timeline.map(t=>`<div class="item"><strong>${escapeHtml(t.title)}</strong><span class="muted">${escapeHtml(t.type)} · ${escapeHtml(t.date)}</span><p>${escapeHtml(t.details)}</p></div>`).join(""):"<p class='muted'>Your timeline is empty.</p>";
+ }catch(err){alert(err.message);if(err.message.toLowerCase().includes("session"))logout();}
+}
+function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function escapeJs(v){return String(v??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");}
+document.getElementById("uploadForm").addEventListener("submit",async e=>{
+ e.preventDefault();const msg=document.getElementById("uploadMessage"),file=document.getElementById("reportFile").files[0];if(!file)return;
+ try{const me=await api("/auth/patient/me");const form=new FormData();form.append("file",file);
+ const result=await api(`/patients/${me.id}/reports`,{method:"POST",body:form});showMessage(msg,result.message,"success");e.target.reset();loadDashboard();
+ }catch(err){showMessage(msg,err.message,"error");}
+});
+loadDashboard();
+</script></body></html>
